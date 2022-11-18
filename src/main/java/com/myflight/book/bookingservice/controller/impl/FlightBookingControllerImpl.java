@@ -32,6 +32,7 @@ public class FlightBookingControllerImpl implements FlightBookingController {
             @ApiResponse(code = 200, message = "Successfully created"),
             @ApiResponse(code= 409, message = "Booking already exist")
     })
+
     @PostMapping("/book")
     public String createBooking(@RequestBody BookingRequest request) {
         if(request.getFlightTime().isAfter( LocalDateTime.now()))
@@ -41,6 +42,10 @@ public class FlightBookingControllerImpl implements FlightBookingController {
     }
 
     @Override
+    @ApiOperation(value = "Update your Booking", notes = "Your Booking updated")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully updated")
+    })
     @PutMapping("/book/{id}")
     public String updateBookingRequest(@PathVariable int id, @RequestBody BookingRequest request) {
         if(request.getFlightTime().isAfter( LocalDateTime.now()))
