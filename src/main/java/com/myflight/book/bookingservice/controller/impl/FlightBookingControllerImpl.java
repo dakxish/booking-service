@@ -2,10 +2,13 @@ package com.myflight.book.bookingservice.controller.impl;
 
 import com.myflight.book.bookingservice.controller.FlightBookingController;
 import com.myflight.book.bookingservice.model.request.BookingRequest;
+import com.myflight.book.bookingservice.model.schema.UserFlightBookingRecord;
+import com.myflight.book.bookingservice.service.BookingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/api")
 public class FlightBookingControllerImpl implements FlightBookingController {
+
+    @Autowired
+    private BookingService bookingService;
 
     @Override
     @GetMapping("/book/{id}")
@@ -46,6 +52,14 @@ public class FlightBookingControllerImpl implements FlightBookingController {
             headers.add("toke", "Error while creating");
             return new ResponseEntity<>("not booked due to invalid booking date", headers, HttpStatus.CONFLICT);
         }
+    }
+
+
+    @PostMapping("/flight/book")
+    public ResponseEntity<UserFlightBookingRecord> createUserFlightBooking(@RequestBody BookingRequest request) {
+
+        UserFlightBookingRecord bookingResponse = bookingService.createBookingRecords(request);
+        return new ResponseEntity<>(bookingResponse, null, HttpStatus.CREATED);
     }
 
     @Override
